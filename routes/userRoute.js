@@ -5,8 +5,8 @@ const {requireSignin} = require('../controllers/authController');
 const router = express.Router();
 router.get('/users', allUsers);
 router.get('/users/:userId', requireSignin, getUser);
-router.put ('/users/:userId', requireSignin, updateUser);
-router.delete ('/users/:userId', requireSignin, deleteUser);
+router.put ('/users/update/:userId', requireSignin, updateUser);
+router.delete ('/users/delete/:userId', requireSignin, deleteUser);
 
 router.param('userId', userById);
 
