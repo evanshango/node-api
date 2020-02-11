@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const User = require('../models/userModel');
 
 exports.userById = (req, res, next, id) => {
@@ -29,4 +30,40 @@ exports.allUsers = (req, res) => {
         }
         res.json({users});
     }).select('name email updated, created');
+};
+
+exports.getUser = (req, res) => {
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
+    return res.json(req.profile)
+};
+
+exports.updateUser = (req, res, next) => {
+    let user = req.profile;
+    user = _.extend(user, req.body); //extend - mutates the source object
+    user.updated = Date.now();
+    user.save((err) => {
+        if (err) {
+            return res.status(400).json({error: 'Action unauthorized'});
+        }
+        user.hashed_password = undefined;
+        user.salt = undefined;
+        res.json({user})
+    })
+};
+
+exports.deleteUser = (req, res, next) => {
+    let user = req.profile;
+    user.remove((err, deletedUser) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        user.hashed_password = undefined;
+        user.salt = undefined;
+        res.json({
+            message: 'Account deleted successfully'
+        });
+    });
 };
