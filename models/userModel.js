@@ -8,7 +8,11 @@ const userSchema = new mongoose.Schema({
     hashed_password: {type: String, required: true},
     salt: String,
     created: {type: Date, default: Date.now()},
-    updated: Date
+    updated: Date,
+    photo: {
+        data: Buffer,
+        contentType: String
+    }
 });
 
 //virtual field
