@@ -31,7 +31,7 @@ exports.createPost = (req, res, next) => {
 
         post.postedBy = req.profile;
         if (files.photo) {
-            post.photo.data = fs.readFileSync(files.photo.password);
+            post.photo.data = fs.readFileSync(files.photo.path);
             post.photo.contentType = files.photo.type
         }
         post.save((err, result) => {
