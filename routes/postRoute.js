@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-    getPosts, createPost, postsByUser, postsById, isAuthor, updatePost, deletePost
+    getPosts, createPost, postsByUser, postsById, isAuthor, updatePost, deletePost, postPhoto
 } = require('../controllers/postController');
 const {requireSignin} = require('../controllers/authController');
 const {userById} = require('../controllers/userController');
@@ -16,6 +16,8 @@ router.delete('/post/delete/:postId', requireSignin, isAuthor, deletePost);
 
 router.param('userId', userById);
 router.param('postId', postsById);
+//photo route
+router.get('/post/photo/:postId', postPhoto);
 
 module.exports = router;
 
