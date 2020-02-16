@@ -1,7 +1,7 @@
 const express = require('express');
 const {
     userById, allUsers, getUser, updateUser, deleteUser, userPhoto, addFollowing, addFollower,
-    removeFollowing, removeFollower
+    removeFollowing, removeFollower, findPeople
 } = require('../controllers/userController');
 const {requireSignin} = require('../controllers/authController');
 
@@ -18,5 +18,8 @@ router.delete('/users/delete/:userId', requireSignin, deleteUser);
 router.get('/user/photo/:userId', userPhoto);
 
 router.param('userId', userById);
+
+//who to follow
+router.get('/users/find-people/:userId', requireSignin, findPeople);
 
 module.exports = router;
