@@ -10,6 +10,6 @@
   "/posts": "get all posts",
   "/posts/new/{userId}": "create a new post",
   "/posts/{userId}": "get posts by user",
-  "/posts/update/{postId}": "update a post",
-  "/posts/delete/{postId}": "delete a post"
+  "/post/update/{postId}": "update a post",
+  "/post/delete/{postId}": "delete a post"
 }
