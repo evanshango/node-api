@@ -1,12 +1,17 @@
 const express = require('express');
-const {signup, signin, signout} = require('../controllers/authController');
+const {signup, signin, signout, forgotPassword, resetPassword} = require('../controllers/authController');
 const {userById} = require('../controllers/userController');
-const {userSignUpValidator} = require('../validator');
+const {userSignUpValidator, passwordResetValidator} = require('../validator');
 
 const router = express.Router();
 router.post('/signup', userSignUpValidator, signup);
 router.post('/signin', signin);
 router.get('/signout', signout);
+
+// password forgot and reset routes
+router.put("/forgot-password", forgotPassword);
+router.put("/reset-password", passwordResetValidator, resetPassword);
+
 
 router.param('userId', userById);
 
