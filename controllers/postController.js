@@ -6,14 +6,12 @@ const _ = require('lodash');
 exports.getPosts = (req, res) => {
     const posts = PostModel.find()
         .populate('postedBy', '_id name')
-        .populate('comments', 'text created')
-        .populate('comments.postedBy', '_id name ')
-        .select('_id title body created likes')
-        .sort({created: -1})
-        .then(posts => {
+        .populate('comments.postedBy', '_id name')
+        // .populate('comments', 'text created')
+        .select('_id title body created likes comments')
+        .sort({created: -1}).then(posts => {
             res.json(posts)
-        })
-        .catch(err => console.log(err));
+        }).catch(err => console.log(err));
 };
 
 exports.createPost = (req, res, next) => {
@@ -65,6 +63,8 @@ exports.postsByUser = (req, res) => {
 exports.postsById = (req, res, next, id) => {
     PostModel.findById(id)
         .populate('postedBy', '_id name')
+        // .populate('comments', 'text created')
+        .populate('comments.postedBy', '_id name')
         .exec((err, post) => {
             if (err || !post) {
                 return res.status(400).json({
@@ -136,13 +136,13 @@ exports.likePost = (req, res) => {
     PostModel.findByIdAndUpdate(req.body.postId,
         {$push: {likes: req.body.userId}},
         {new: true}).exec((err, result) => {
-            if (err){
-                return res.status(400).json({
-                    error: err
-                })
-            } else {
-                res.json(result)
-            }
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        } else {
+            res.json(result)
+        }
     })
 };
 
@@ -150,7 +150,7 @@ exports.unlikePost = (req, res) => {
     PostModel.findByIdAndUpdate(req.body.postId,
         {$pull: {likes: req.body.userId}},
         {new: true}).exec((err, result) => {
-        if (err){
+        if (err) {
             return res.status(400).json({
                 error: err
             })
@@ -167,9 +167,8 @@ exports.commentPost = (req, res) => {
         {$push: {comments: comment}},
         {new: true})
         .populate('comments.postedBy', '_id name')
-        .populate('postedBy', '_id name')
-        .exec((err, result) => {
-        if (err){
+        .populate('postedBy', '_id name').exec((err, result) => {
+        if (err) {
             return res.status(400).json({
                 error: err
             })
@@ -185,16 +184,15 @@ exports.uncommentPost = (req, res) => {
         {$pull: {comments: {_id: comment._id}}},
         {new: true})
         .populate('comments.postedBy', '_id name')
-        .populate('postedBy', '_id name')
-        .exec((err, result) => {
-            if (err){
-                return res.status(400).json({
-                    error: err
-                })
-            } else {
-                res.json(result)
-            }
-        })
+        .populate('postedBy', '_id name').exec((err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        } else {
+            res.json(result)
+        }
+    })
 };
 
 
